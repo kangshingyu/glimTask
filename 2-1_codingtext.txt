@@ -1,0 +1,23 @@
+
+#include <string>
+#include <vector>
+#include <stdexcept>  // 예외처리를 위한 헤더
+
+using namespace std;
+
+int solution(int n, int k) {
+    // 예외 처리: 제한사항 확인
+    if (n <= 0 || n >= 1000) {
+        throw out_of_range("양꼬치는 0보다 크고 1000보다 작아야 합니다.");
+    }
+    if (k < n / 10 || k >= 1000) {
+        throw out_of_range("음료수는 n / 10 이상이고 1000 미만이어야 합니다.");
+    }
+
+    // 서비스 음료수 수
+    int freeDrinks = n / 10;
+
+    // 총 금액 계산
+    int total = (n * 12000) + (k * 2000) - (freeDrinks * 2000);
+    return total;
+}

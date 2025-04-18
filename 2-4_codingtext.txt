@@ -1,0 +1,28 @@
+#include <string>
+#include <vector>
+#include <stdexcept>  // 예외처리를 위한 헤더
+
+using namespace std;
+
+int solution(vector<vector<int>> dots) {
+    int answer = 0;
+
+    // 두 직선이 평행한지 확인하는 함수
+    auto isParallel = [](vector<int>& dot1, vector<int>& dot2, vector<int>& dot3, vector<int>& dot4) -> bool {
+        // (dot1, dot2) 직선과 (dot3, dot4) 직선의 기울기 비교
+        return (dot2[1] - dot1[1]) * (dot4[0] - dot3[0]) == (dot4[1] - dot3[1]) * (dot2[0] - dot1[0]);
+    };
+
+    // 두 직선이 평행하면 answer에 1을 할당
+    if (isParallel(dots[0], dots[1], dots[2], dots[3]) ||  // (점 1-점 2) 평행 (점 3-점 4)
+        isParallel(dots[0], dots[2], dots[1], dots[3]) ||  // (점 1-점 3) 평행 (점 2-점 4)
+        isParallel(dots[0], dots[3], dots[1], dots[2]))    // (점 1-점 4) 평행 (점 2-점 3)
+    {
+        answer = 1;  // 평행하면 answer에 1을 할당
+    }
+    else {
+        answer = 0;  // 평행하지 않으면 answer에 0을 할당
+    }
+
+    return answer;  // 결과 반환
+}

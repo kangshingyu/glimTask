@@ -1,0 +1,77 @@
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <cmath>  // abs 함수 사용
+
+using namespace std;
+
+int solution(int a, int b, int c, int d) {
+    
+     // 제한사항: a, b, c, d는 1 이상 6 이하
+    if (a < 1 || a > 6 || b < 1 || b > 6 || c < 1 || c > 6 || d < 1 || d > 6) {
+        return 0;  // 또는 에러 코드로 -1 등 반환 가능
+    }
+    
+    vector<int> dice = {a, b, c, d};
+    unordered_map<int, int> freq;
+    int answer = 0;
+
+    // 주사위 숫자 빈도 계산
+    for (int num : dice) {
+        freq[num]++;
+    }
+
+    if (freq.size() == 1) {
+        // 네 숫자가 모두 같음
+        answer = 1111 * dice[0];
+    }
+    else if (freq.size() == 2) {
+        for (auto& [num, count] : freq) {
+            if (count == 3) {
+                // 세 개가 같고 하나 다름
+                int p = num, q = 0;
+                for (auto& [n, cnt] : freq) {
+                    if (cnt == 1) {
+                        q = n;
+                        break;
+                    }
+                }
+                answer = (10 * p + q) * (10 * p + q);
+                break;
+            }
+        }
+
+        // 두 개씩 같은 경우
+        vector<int> pair;
+        for (auto& [num, count] : freq) {
+            if (count == 2) {
+                pair.push_back(num);
+            }
+        }
+        if (pair.size() == 2) {
+            int p = pair[0], q = pair[1];
+            answer = (p + q) * abs(p - q);
+        }
+    }
+    else if (freq.size() == 3) {
+        // 하나가 두 번, 나머지 두 개가 다를 경우
+        int q = 0, r = 0;
+        for (auto& [num, count] : freq) {
+            if (count == 1) {
+                if (q == 0) q = num;
+                else r = num;
+            }
+        }
+        answer = q * r;
+    }
+    else if (freq.size() == 4) {
+        // 모두 다른 숫자
+        answer = *min_element(dice.begin(), dice.end());
+    }
+
+    return answer;
+}
+
+
+
